@@ -89,10 +89,10 @@ class App extends Component {
       (player === "scissors" && computer === "paper") ||
       (player === "paper" && computer === "rock")
     ) {
-      this.updatePlayerScore()
+      // this.updatePlayerScore()
       return "Player Wins!";
     } else {
-      this.updateComputerScore(1)
+      // this.updateComputerScore(1)
       return "Computer Wins!";
     }
   };
