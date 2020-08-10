@@ -6,7 +6,7 @@ The player gets to select the type of opponent to play (i.e, random computer or 
 Domain Driven Design
 
 # Screen Shots:
-
+<img src="https://github.com/Driaque/RockPaperScissor-React-/issues/1#issue-675934552" >
 
 # Actors
 - Game
