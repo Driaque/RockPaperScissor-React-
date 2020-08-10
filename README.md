@@ -54,6 +54,13 @@ ________________
 + updateNextBest()
 + selectnextbestmove()
 
+# How to Run Application
+To run the game download the source file;
+- cd rock-paper-scissors/
+- npm install(optional)
+- npm start (to launch on Browser)
+
+
 ## Future Extensions
 - Ability to add player's nickname
 - record Score
