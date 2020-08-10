@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import Player from "./player";
 import "./styles.css";
-import paper from "./assets/paper.png";
-import rock from "./assets/rock.png";
-import scissors from "./assets/scissors.png";
+// import paper from "./assets/paper.png";
+// import rock from "./assets/rock.png";
+// import scissors from "./assets/scissors.png";
 
 
 const moves = ["rock", "paper", "scissors"];
@@ -27,16 +26,13 @@ class App extends Component {
   };
 
   startGame = () => {
-    let counter = 0, rounds =3
     let gameInterval = setInterval(() => {
-
       if (this.state.type === "tactical"){
         this.playTactical() //Play tactically
       }
       if (this.state.type === "random"){
         this.lastChoice = this.playRandom() //Play random for Computer
       }
-      rounds = this.state.round
       this.setState({
         winner: this.selectWinner()
       });
@@ -108,7 +104,7 @@ class App extends Component {
   };
   displayWinner = () =>{
     const { playerScore, computerScore } = this.state;
-    if(this.state.round == 0){
+    if(this.state.round === 0){
       if(playerScore > computerScore){
         return "Player Wins the Game"
       }else if(playerScore === computerScore){
@@ -203,9 +199,7 @@ class App extends Component {
     }
   };
   render() {
-    var playerMove = this.state.player;
-    var computerMove = this.state.computer;
-    const { player, computer, winner, final,  playerScore, computerScore } = this.state;
+    const { player, computer, winner} = this.state;
     return (
       <>
         <div className="header">
@@ -250,14 +244,14 @@ class App extends Component {
         <div class ="result">
           <div class ="playerMove">
           player:
-            <div className={playerMove}>
+            <div className={player}>
             </div>
           <b>score :</b> {this.state.playerScore}
           </div>
           <div class="center"><b>Vs</b></div>
           <div class ="computerMove">
           {this.state.type} computer:
-            <div className={computerMove}>
+            <div className={computer}>
             </div>
             <b>score :</b> {this.state.computerScore}
           </div>
