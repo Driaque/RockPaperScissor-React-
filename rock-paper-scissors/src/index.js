@@ -31,7 +31,6 @@ class App extends Component {
     let gameInterval = setInterval(() => {
 
       if (this.state.type === "tactical"){
-       // this.nextBest = this.selectNextBestMove(this.lastChoice)
         this.playTactical() //Play tactically
       }
       if (this.state.type === "random"){
@@ -47,7 +46,6 @@ class App extends Component {
       clearInterval(gameInterval);
     }, 100);
   };
-
   //selectMode
   selectMode = mode => {
     let round = 0;
@@ -98,7 +96,6 @@ class App extends Component {
       return "Computer";
     }
   };
-
   scoreWinner = () => {
     const { winner } = this.state;
     if(winner === "Player" ){
@@ -109,7 +106,6 @@ class App extends Component {
       return "No winner"
     }
   };
-
   displayWinner = () =>{
     const { playerScore, computerScore } = this.state;
     if(this.state.round == 0){
@@ -121,7 +117,6 @@ class App extends Component {
         return "Computer Wins the Game"
       }
     }
-    
   }
   selectMove = move => {
     this.setState({
@@ -156,8 +151,6 @@ class App extends Component {
     });
   }
   playTactical = () =>{
-    console.log('playing tactical')
-    //const {  lastChoice, nextBest } = this.state;
     let move ="",lastChoice=this.state.lastChoice, nextBest=this.state.nextBest
     if(lastChoice ===""){
       move =moves[Math.floor(Math.random() * moves.length)];
@@ -187,15 +180,12 @@ class App extends Component {
       computerScore: computerScore + step,
       });
   }
-
   //update next Best
   updateNextBest = (nextBest) => {
     this.setState({ nextBest: nextBest});
   }
   //selectNextBestMove
   selectNextBestMove = (lastChoice) => {
-    // const {  lastChoice } = this.state;
-
     switch(lastChoice) {
       case 'rock':
         this.updateNextBest("paper")
