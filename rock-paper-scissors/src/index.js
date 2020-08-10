@@ -79,7 +79,8 @@ class App extends Component {
       playerScore: 0,
       computerScore: 0,
       // nextBest:"",
-      lastChoice:""
+      lastChoice:"",
+      round: 3 //default of 3
       });
   };
   selectWinner = () => {
@@ -163,8 +164,7 @@ class App extends Component {
     }else{
       move = nextBest //Play next Best 
     }
-    // nextBest = nextBest??this.selectNextBestMove(lastChoice)
-    // move = nextBest //Play next Best 
+
     lastChoice = move //update last choice
     nextBest = this.selectNextBestMove(lastChoice) // update next best
     this.setState({
@@ -173,7 +173,7 @@ class App extends Component {
       nextBest: nextBest
     });
   }
-  // update Player Score
+  // update Player Score 
   updatePlayerScore = (step) => {
     let  playerScore = this.state.playerScore;
     this.setState({
@@ -262,13 +262,16 @@ class App extends Component {
           player:
             <div className={playerMove}>
             </div>
+          <b>score :</b> {this.state.playerScore}
           </div>
           <div class="center"><b>Vs</b></div>
           <div class ="computerMove">
-    {this.state.type} computer:
+          {this.state.type} computer:
             <div className={computerMove}>
             </div>
+            <b>score :</b> {this.state.computerScore}
           </div>
+          
         </div>
         <div className="winner">Match Winner: {winner ? this.selectWinner() : null}</div>
         <div className="finalWin">Game Winner: {this.displayWinner() ?? null}</div>

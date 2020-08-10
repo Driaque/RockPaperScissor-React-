@@ -60,7 +60,10 @@ font-size: large;
   border-radius: 25px;
   background: #000;
 }
-
+.moveBtn:active{
+  background-color:rgba(150, 220, 253, 0.61)
+}
+.moveBtn:focus{background-color:red;}
 .player:nth-child(2) {
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
@@ -147,5 +150,7 @@ button {
 button:hover {
   cursor: pointer;
   background: rgb(32, 31, 31);
-
+  background-color:rgba(150, 220, 253, 0.61)
 }
+
+.button:focus{background-color:red;}
