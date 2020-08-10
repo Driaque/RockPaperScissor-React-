@@ -43,7 +43,7 @@ ________________
 + selectWinner()
 + scoreWinner()
 + displayWinner()
-+ seectMove(move)
++ selectMove(move)
 + checkRounds()
 + playRandom()
 + playTactical()
