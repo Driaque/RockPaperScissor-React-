@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Player from "./player";
 import "./styles.css";
+import paper from "./assets/paper.png";
+import rock from "./assets/rock.png";
+import scissors from "./assets/scissors.png";
+
 
 const moves = ["rock", "paper", "scissors"];
 const modes = ["bestOf3", "bestOf5"];
@@ -25,26 +29,21 @@ class App extends Component {
   startGame = () => {
     let counter = 0, rounds =3
     let gameInterval = setInterval(() => {
-      // alert("Select Computer type and Round to Begin")
-      if(this.state.type === "tactical"){
-        this.nextBest = this.selectNextBestMove(this.lastChoice)
+
+      if (this.state.type === "tactical"){
+       // this.nextBest = this.selectNextBestMove(this.lastChoice)
         this.playTactical() //Play tactically
-      }else{
+      }
+      if (this.state.type === "random"){
         this.lastChoice = this.playRandom() //Play random for Computer
       }
       rounds = this.state.round
-      // if (counter > 5) {
-      //   clearInterval(gameInterval);
-      //   this.setState({
-      //     winner: this.selectWinner()
-      //   });
-      // }
-      while (counter < rounds){
-        counter++;
-        this.setState({
-          winner: this.selectWinner()
-        });
-      }
+      this.setState({
+        winner: this.selectWinner()
+      });
+      this.scoreWinner()
+      this.checkRounds()
+      this.displayWinner()
       clearInterval(gameInterval);
     }, 100);
   };
@@ -63,7 +62,9 @@ class App extends Component {
       mode: mode,
       round: round,
       playerScore: 0,
-      computerScore: 0
+      computerScore: 0,
+      // nextBest:"",
+      lastChoice:""
     });
   };
   //select Computer Type
@@ -76,7 +77,9 @@ class App extends Component {
     this.setState({
       type: type,
       playerScore: 0,
-      computerScore: 0
+      computerScore: 0,
+      // nextBest:"",
+      lastChoice:""
       });
   };
   selectWinner = () => {
@@ -89,29 +92,53 @@ class App extends Component {
       (player === "scissors" && computer === "paper") ||
       (player === "paper" && computer === "rock")
     ) {
-      // this.updatePlayerScore()
-      return "Player Wins!";
+      return "Player";
     } else {
-      // this.updateComputerScore(1)
-      return "Computer Wins!";
+      return "Computer";
     }
   };
 
-  displayWinner = (playerScore, computerScore) =>{
-    
-    if(playerScore > computerScore){
-      return "Player Wins the Game"
-    }else if(playerScore === computerScore){
-      return "This Game has no Winner!"
+  scoreWinner = () => {
+    const { winner } = this.state;
+    if(winner === "Player" ){
+      this.updatePlayerScore(1)
+    }else if( winner === "Computer"){
+      this.updateComputerScore(1)
     }else{
-      return "Computer Wins the Game"
+      return "No winner"
     }
+  };
+
+  displayWinner = () =>{
+    const { playerScore, computerScore } = this.state;
+    if(this.state.round == 0){
+      if(playerScore > computerScore){
+        return "Player Wins the Game"
+      }else if(playerScore === computerScore){
+        return "This Game has no Winner!"
+      }else{
+        return "Computer Wins the Game"
+      }
+    }
+    
   }
   selectMove = move => {
     this.setState({
       player: move,
       winner: ""
     });
+  };
+  //checkRounds
+  checkRounds = () => {
+    if(this.state.round >= 0){
+      this.setState({
+      round: this.state.round -1
+    });
+    }else{
+      this.setState({
+        round: 0
+      });
+    }
   };
   //playRandom
   playRandom = () =>{
@@ -129,9 +156,15 @@ class App extends Component {
   }
   playTactical = () =>{
     console.log('playing tactical')
-    let move ="",lastChoice=this.lastChoice, nextBest =this.nextBest
-    nextBest = nextBest??this.selectNextBestMove(this.lastChoice)
-    move = nextBest //Play next Best 
+    //const {  lastChoice, nextBest } = this.state;
+    let move ="",lastChoice=this.state.lastChoice, nextBest=this.state.nextBest
+    if(lastChoice ===""){
+      move =moves[Math.floor(Math.random() * moves.length)];
+    }else{
+      move = nextBest //Play next Best 
+    }
+    // nextBest = nextBest??this.selectNextBestMove(lastChoice)
+    // move = nextBest //Play next Best 
     lastChoice = move //update last choice
     nextBest = this.selectNextBestMove(lastChoice) // update next best
     this.setState({
@@ -141,23 +174,17 @@ class App extends Component {
     });
   }
   // update Player Score
-  updatePlayerScore = () => {
-    // this.setState((preState) => {
-    //   return {
-    //     playerScore : preState.playerScore + 1
-    //     };
-    //   this.setState((prevState, props) => ({
-    //     playerScore: prevState.playerScore + 1
-    // })); 
-
+  updatePlayerScore = (step) => {
+    let  playerScore = this.state.playerScore;
+    this.setState({
+      playerScore: playerScore + step,
+      });
   }
-  
-
   // update Computers Score
   updateComputerScore = (step) => {
     let  computerScore = this.state.computerScore;
     this.setState({
-      computerScore: computerScore,
+      computerScore: computerScore + step,
       });
   }
 
@@ -179,36 +206,49 @@ class App extends Component {
       case 'scissors':
         this.updateNextBest("rock")
         return 'rock';
+      case '':
+        return moves[Math.floor(Math.random() * moves.length)];
       default:
         return moves[Math.floor(Math.random() * moves.length)];
     }
   };
   render() {
+    var playerMove = this.state.player;
+    var computerMove = this.state.computer;
     const { player, computer, winner, final,  playerScore, computerScore } = this.state;
     return (
       <>
-        <h1 style={{ textAlign: "center" }}>Rock Paper Scissors</h1>
-        <div>Select Computer type and Round to Begin</div>
-        <div class="gamesetting">
+        <div className="header">
+        <header>
+        <h1 style={{ textAlign: "center" }}>Rock Paper Scissors.com</h1>
+        </header>
+        </div>
+        <div className="sys_msg"><b>Please select Computer Type and preferred number of Round to Begin</b></div>
+        <div class="gamesetting" style={{ display: "flex" }}>
         <button
+            style={{ marginLeft: 0 , backgroundColor: "orange"}}
+
             className="moveBtn"
             onClick={() => this.selectType("random")}
           >
             Random
           </button>
         <button
+            style={{ marginLeft: 0 , backgroundColor: "Red"}}
             className="moveBtn"
             onClick={() => this.selectType("tactical")}
           >
             Tactical AI
           </button>
           <button
+            style={{ marginLeft: 200 , backgroundColor: "green"}}
             className="moveBtn"
             onClick={() => this.selectMode("bestOf3")}
           >
             Best Of 3
           </button>
-          <button
+          <button 
+            style={{ marginLeft: "auto", backgroundColor: "blue"}}
             className="moveBtn"
             onClick={() => this.selectMode("bestOf5")}
           >
@@ -216,35 +256,52 @@ class App extends Component {
           </button>
         
         </div>
-        <div>
-          <Player move={player} />
-          <Player move={computer} />
+        <div className="round"> Rounds: {this.state.round} </div>
+        <div class ="result">
+          <div class ="playerMove">
+          player:
+            <div className={playerMove}>
+            </div>
+          </div>
+          <div class="center"><b>Vs</b></div>
+          <div class ="computerMove">
+    {this.state.type} computer:
+            <div className={computerMove}>
+            </div>
+          </div>
         </div>
-        <div>
-          <button
+        <div className="winner">Match Winner: {winner ? this.selectWinner() : null}</div>
+        <div className="finalWin">Game Winner: {this.displayWinner() ?? null}</div>
+       
+        <div className="footer">
+        <button
+            class="column"
             className="moveBtn"
             onClick={() => this.selectMove("rock")}
           >
             rock
           </button>
           <button
+            class="column"
             className="moveBtn"
             onClick={() => this.selectMove("paper")}
           >
             paper
           </button>
           <button
+            class="column"          
             className="moveBtn"
             onClick={() => this.selectMove("scissors")}
           >
             scissor
           </button>
-        </div>
-        <div className="winner"> {winner ? this.selectWinner() : null}</div>
-        <div className="finalWin"> {this.displayWinner() ?? null}</div>
-        <button type="button" onClick={this.startGame}>
+          <button 
+        style={{ marginLeft: 400, marginTop:-50, backgroundColor: "Green"}} type="button" onClick={this.startGame}>
           Play!
         </button>
+    </div>
+
+
       </>
     );
   }
